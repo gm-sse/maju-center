@@ -215,10 +215,7 @@
             background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
         }
 
-        /* 글씨 크게 모드: 슬라이드 전체 확대 */
-        body.font-large .slide-container {
-            zoom: 1.28;
-        }
+        /* 글씨 크게 / 모바일 스케일: transform-origin은 JS에서 동적 설정 */
 
         /* Slide 1 전용 스타일 */
         .slide1-left {
@@ -251,17 +248,6 @@
         .slide-container .space-y-3 > * + * { margin-top: 14px; }
         .slide-container .space-y-3\.5 > * + * { margin-top: 16px; }
 
-        /* 모바일 뷰포트 스케일링 */
-        .slide-container {
-            transform-origin: top center;
-        }
-        @media (max-width: 1320px) {
-            body {
-                padding-left: 0;
-                padding-right: 0;
-                overflow-x: hidden;
-            }
-        }
     </style>
 </head>
 <body>
@@ -288,6 +274,7 @@
                 label.textContent = '기본 크기';
                 btn.classList.add('active');
             }
+            scaleSlides();
         }
     </script>
 
@@ -818,28 +805,64 @@
     </div>
 
 
-    <!-- 모바일/소형 화면 자동 스케일링 -->
+    <!-- 모바일/소형 화면 자동 스케일링 + 글씨 크게 통합 -->
     <script>
         function scaleSlides() {
-            const SLIDE_W = 1280;
-            const PADDING = 16;
-            const vw = window.innerWidth;
-            const scale = vw < SLIDE_W + PADDING * 2
-                ? (vw - PADDING * 2) / SLIDE_W
-                : 1;
+            var SLIDE_W = 1280;
+            var SLIDE_H = 720;
+            var PADDING = 8;
+            var fontLarge = document.body.classList.contains('font-large');
+            var vw = window.innerWidth;
+
+            var scale;
+            if (fontLarge) {
+                // 글씨 크게: 뷰포트가 충분히 넓으면 1.28배, 좁으면 뷰포트에 맞춤
+                scale = (vw - PADDING * 2) >= SLIDE_W * 1.28
+                    ? 1.28
+                    : (vw - PADDING * 2) / SLIDE_W;
+            } else {
+                // 기본: 뷰포트보다 슬라이드가 넓을 때만 축소
+                scale = (vw - PADDING * 2) < SLIDE_W
+                    ? (vw - PADDING * 2) / SLIDE_W
+                    : 1;
+            }
+
+            if (scale < 1) {
+                // 축소 모드(모바일): 중앙 정렬, 가로 오버플로 숨김
+                document.body.style.alignItems = 'center';
+                document.body.style.paddingLeft = '';
+                document.documentElement.style.overflowX = 'hidden';
+            } else if (scale > 1) {
+                // 확대 모드(글씨 크게): 좌측 정렬, 오른쪽으로 스크롤 가능
+                document.body.style.alignItems = 'flex-start';
+                document.body.style.paddingLeft = PADDING + 'px';
+                document.documentElement.style.overflowX = 'auto';
+            } else {
+                document.body.style.alignItems = 'center';
+                document.body.style.paddingLeft = '';
+                document.documentElement.style.overflowX = '';
+            }
+
+            document.body.style.gap = scale < 1 ? Math.round(48 * scale) + 'px' : '';
 
             document.querySelectorAll('.slide-container').forEach(function(el) {
-                if (scale < 1) {
-                    el.style.transform = 'scale(' + scale + ')';
-                    el.style.marginBottom = '-' + Math.round(720 * (1 - scale)) + 'px';
-                } else {
+                if (scale === 1) {
                     el.style.transform = '';
+                    el.style.transformOrigin = '';
                     el.style.marginBottom = '';
+                } else {
+                    el.style.transform = 'scale(' + scale + ')';
+                    // 확대: 좌측 기준으로 오른쪽 확장 → 스크롤로 전체 확인 가능
+                    // 축소: 중앙 기준으로 균등 수축 → overflow:hidden으로 정중앙 표시
+                    el.style.transformOrigin = scale > 1 ? 'top left' : 'top center';
+                    if (scale < 1) {
+                        el.style.marginBottom = '-' + Math.round(SLIDE_H * (1 - scale)) + 'px';
+                    } else {
+                        // 확대 시 레이아웃 높이도 늘려서 다음 슬라이드와 겹치지 않도록
+                        el.style.marginBottom = Math.round(SLIDE_H * (scale - 1)) + 'px';
+                    }
                 }
             });
-
-            // body gap도 모바일에서 축소
-            document.body.style.gap = scale < 1 ? Math.round(48 * scale) + 'px' : '';
         }
 
         scaleSlides();
