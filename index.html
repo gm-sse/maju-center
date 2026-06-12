@@ -250,6 +250,18 @@
         .slide-container .leading-relaxed { line-height: 1.78 !important; }
         .slide-container .space-y-3 > * + * { margin-top: 14px; }
         .slide-container .space-y-3\.5 > * + * { margin-top: 16px; }
+
+        /* 모바일 뷰포트 스케일링 */
+        .slide-container {
+            transform-origin: top center;
+        }
+        @media (max-width: 1320px) {
+            body {
+                padding-left: 0;
+                padding-right: 0;
+                overflow-x: hidden;
+            }
+        }
     </style>
 </head>
 <body>
@@ -804,6 +816,35 @@
             </div>
         </div>
     </div>
+
+
+    <!-- 모바일/소형 화면 자동 스케일링 -->
+    <script>
+        function scaleSlides() {
+            const SLIDE_W = 1280;
+            const PADDING = 16;
+            const vw = window.innerWidth;
+            const scale = vw < SLIDE_W + PADDING * 2
+                ? (vw - PADDING * 2) / SLIDE_W
+                : 1;
+
+            document.querySelectorAll('.slide-container').forEach(function(el) {
+                if (scale < 1) {
+                    el.style.transform = 'scale(' + scale + ')';
+                    el.style.marginBottom = '-' + Math.round(720 * (1 - scale)) + 'px';
+                } else {
+                    el.style.transform = '';
+                    el.style.marginBottom = '';
+                }
+            });
+
+            // body gap도 모바일에서 축소
+            document.body.style.gap = scale < 1 ? Math.round(48 * scale) + 'px' : '';
+        }
+
+        scaleSlides();
+        window.addEventListener('resize', scaleSlides);
+    </script>
 
 </body>
 </html>
