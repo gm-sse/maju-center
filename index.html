@@ -390,9 +390,9 @@
     <div class="slide-container" id="slide2">
         <h2 class="slide-title">스마트 워크숍 기획 혁신 <span><i class="fa-solid fa-circle-nodes text-emerald-600"></i> 포스트잇 대신 QR코드와 AI가 연결한 새로운 거버넌스</span></h2>
         <div class="content-area">
-            <div class="two-column" style="grid-template-columns: 46% 54%;">
+            <div class="two-column" style="grid-template-columns: 46% 54%; align-items: stretch;">
                 <!-- 좌측 내용 설명 카드 -->
-                <div class="flex flex-col gap-4 justify-between h-full py-1">
+                <div class="flex flex-col gap-4 justify-between py-1">
                     <div class="space-y-3">
                         <div class="bg-teal-50 border-l-4 border-majuTeal p-4 rounded-r-xl">
                             <h3 class="text-sm font-bold text-teal-900 mb-1.5 flex items-center justify-between">
@@ -426,15 +426,15 @@
                     </div>
                 </div>
 
-                <!-- 우측 이미지: 가로형 2단 적층 -->
-                <div class="flex flex-col gap-3 h-full">
-                    <div class="relative rounded-xl overflow-hidden shadow-md border border-slate-200 flex-1 bg-slate-900">
+                <!-- 우측 이미지: grid rows로 정확한 50/50 높이 분할 -->
+                <div style="display: grid; grid-template-rows: 1fr 1fr; gap: 12px; min-height: 0;">
+                    <div class="relative rounded-xl overflow-hidden shadow-md border border-slate-200 bg-slate-900" style="min-height:0;">
                         <img class="w-full h-full object-contain" alt="테이블 세팅과 QR 안내판" src="/images/qr-form.png">
                         <div class="absolute bottom-0 inset-x-0 bg-black/70 p-2 text-center text-xs text-slate-200">
                             <i class="fa-solid fa-qrcode mr-1"></i> 테이블 QR 접속 가이드
                         </div>
                     </div>
-                    <div class="relative rounded-xl overflow-hidden shadow-md border border-slate-200 flex-1 bg-slate-900">
+                    <div class="relative rounded-xl overflow-hidden shadow-md border border-slate-200 bg-slate-900" style="min-height:0;">
                         <img class="w-full h-full object-contain" alt="NotebookLM 요약 메커니즘" src="/images/paperless-smart-governance.png">
                         <div class="absolute bottom-0 inset-x-0 bg-black/75 p-2 text-xs text-slate-200">
                             <i class="fa-solid fa-robot mr-1 text-emerald-400"></i> <strong>스마트 거버넌스 첫 시도:</strong> AI 도식화 기반 디지털 발표
