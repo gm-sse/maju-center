@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>광명시 사회연대혁신센터 마주센터 스마트 워크숍 보고서</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        forest: '#064e3b',
+                        majuTeal: '#0d9488',
+                        majuMint: '#10b981',
+                        coral: '#f97316',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 1. 글로벌 레이아웃 및 슬라이드 규격 정의 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(160deg, #0d1f1a 0%, #0f172a 60%, #1a0f1f 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            align-items: center;
+            padding: 70px 0 60px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 1280x720 고정 표준 규격 */
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #fdfcfb;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255,255,255,0.06);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 42px 52px;
+            color: #1e293b;
+        }
+
+        /* 포근한 그라디언트 장식 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(13, 148, 136, 0.07) 0%, rgba(253, 252, 251, 0) 65%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 65%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. 타이포그래피 */
+        .slide-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #064e3b;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #e8f4f0;
+            padding-bottom: 14px;
+            width: 100%;
+        }
+
+        .slide-title span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0d9488;
+            background-color: #f0fdfa;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #ccfbf1;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            min-height: 0;
+        }
+
+        /* 슬라이드 좌우 2분할 레이아웃 */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+            height: 100%;
+        }
+
+        /* 슬라이드 3분할 카드 레이아웃 */
+        .three-column-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            height: 100%;
+        }
+
+        /* 만족도 조사 가로 누적 막대 그래프 스타일 */
+        .progress-bar-group {
+            width: 100%;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-outer {
+            background-color: #f0faf8;
+            height: 22px;
+            border-radius: 11px;
+            overflow: hidden;
+            width: 100%;
+            border: 1px solid #d1fae5;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            border-radius: 11px;
+            background: linear-gradient(90deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* ─── 접근성: 글씨 크게 보기 버튼 ─── */
+        #a11y-btn {
+            position: fixed;
+            top: 18px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #064e3b 0%, #0d9488 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 11px 20px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(6, 78, 59, 0.35);
+            transition: all 0.22s ease;
+            letter-spacing: -0.3px;
+        }
+        #a11y-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(6, 78, 59, 0.45);
+        }
+        #a11y-btn.active {
+            background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
+        }
+
+        /* 글씨 크게 모드: 슬라이드 전체 확대 */
+        body.font-large .slide-container {
+            zoom: 1.28;
+        }
+
+        /* Slide 1 전용 스타일 */
+        .slide1-left {
+            background: linear-gradient(145deg, #f0fdf9 0%, #fdfcfb 55%, #fdf8f0 100%);
+        }
+        .slide1-h1 { font-size: 35px; line-height: 1.18; }
+        .slide1-h1-name { font-size: 23px; font-weight: 700; }
+        .slide1-desc { font-size: 13.5px; }
+        .slide1-quote-text { font-size: 13px; }
+        .stat-card { border-radius: 16px; padding: 12px; text-align: center; border-width: 1px; border-style: solid; }
+        .stat-card-teal { background: linear-gradient(145deg, #f0fdf9, #ecfdf5); border-color: #a7f3d0; }
+        .stat-card-emerald { background: linear-gradient(145deg, #f0fdf4, #ecfdf5); border-color: #6ee7b7; }
+        .stat-card-forest { background: linear-gradient(145deg, #f0fdf9, #f7fffe); border-color: #99f6e4; }
+        .stat-val { display: block; font-size: 25px; font-weight: 900; font-family: 'Montserrat', sans-serif; }
+        .stat-label { font-size: 12px; font-weight: 700; display: block; margin-top: 2px; line-height: 1.3; }
+        .stat-sub { font-size: 11px; display: block; opacity: 0.75; }
+        .slide1-overlay-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            color: white; font-size: 12px; font-weight: 700;
+            padding: 5px 12px; border-radius: 50px;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        /* 전체 슬라이드 기본 가독성 개선 */
+        .slide-container p { line-height: 1.75; }
+        .slide-container .text-xs { font-size: 13px; }
+        .slide-container .text-sm { font-size: 15px; }
+        .slide-container .leading-relaxed { line-height: 1.78 !important; }
+        .slide-container .space-y-3 > * + * { margin-top: 14px; }
+        .slide-container .space-y-3\.5 > * + * { margin-top: 16px; }
+    </style>
+</head>
+<body>
+
+    <!-- 접근성: 글씨 크게 보기 고정 버튼 -->
+    <button type="button" id="a11y-btn" onclick="toggleFontSize()" title="글씨 크기 조절">
+        <i class="fa-solid fa-magnifying-glass-plus" id="a11y-icon"></i>
+        <span id="a11y-label">글씨 크게</span>
+    </button>
+    <script>
+        function toggleFontSize() {
+            const body = document.body;
+            const btn = document.getElementById('a11y-btn');
+            const icon = document.getElementById('a11y-icon');
+            const label = document.getElementById('a11y-label');
+            if (body.classList.contains('font-large')) {
+                body.classList.remove('font-large');
+                icon.className = 'fa-solid fa-magnifying-glass-plus';
+                label.textContent = '글씨 크게';
+                btn.classList.remove('active');
+            } else {
+                body.classList.add('font-large');
+                icon.className = 'fa-solid fa-magnifying-glass-minus';
+                label.textContent = '기본 크기';
+                btn.classList.add('active');
+            }
+        }
+    </script>
+
+    <!-- Slide 1: 표지 — 사회연대경제의 의의 & 시민 열기 -->
+    <div class="slide-container" id="slide1" style="padding: 0; display: grid; grid-template-columns: 56% 44%;">
+        <div class="slide1-left flex flex-col justify-between h-full px-11 py-8">
+            <div>
+                <!-- 상단: 행안부 공모 선정 배지 + 날짜 -->
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="inline-flex items-center gap-1.5 bg-forest text-white font-extrabold px-3.5 py-1.5 rounded-full shadow tracking-wide" style="font-size:12px;">
+                        <i class="fa-solid fa-award text-yellow-300"></i> 행안부 2026 사회연대경제 혁신모델 공모 최종 선정
+                    </span>
+                    <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 font-bold px-3 py-1 rounded-full" style="font-size:12px;">
+                        <i class="fa-solid fa-flag text-amber-500"></i> 2026년 9월 개관 예정
+                    </span>
+                </div>
+
+                <!-- 메인 헤드라인 -->
+                <h1 class="slide1-h1 font-black text-forest tracking-tight mb-1">
+                    마주보다 · 마주치다 · 마주앉다<br>
+                    <span class="text-majuTeal">사회연대경제</span>의 새 거점,
+                    <span class="slide1-h1-name text-slate-700">마주(MAJU)센터</span>
+                </h1>
+
+                <!-- 서브 설명 -->
+                <p class="slide1-desc text-slate-600 leading-relaxed mb-4">
+                    이윤이 아닌 <strong class="text-forest">사람·공동체·상생</strong>을 중심에 두는 사회연대경제의 가치를, 광명 시민들이
+                    직접 109개의 아이디어로 설계했습니다. <strong class="text-majuTeal">지방정부 최초 전액 시비 투입</strong>으로 건립되며
+                    전국이 주목하는 시민 주도 혁신 모델입니다.
+                </p>
+
+                <!-- 3대 참여 지표 -->
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="stat-card stat-card-teal">
+                        <span class="stat-val text-teal-700">81명</span>
+                        <span class="stat-label text-teal-700">시민 직접 참여</span>
+                        <span class="stat-sub text-teal-400">신청 101명</span>
+                    </div>
+                    <div class="stat-card stat-card-emerald">
+                        <span class="stat-val text-emerald-700">109개</span>
+                        <span class="stat-label text-emerald-700">현장 아이디어</span>
+                        <span class="stat-sub text-emerald-400">1~4층 층별 수렴</span>
+                    </div>
+                    <div class="stat-card stat-card-forest">
+                        <span class="stat-val" style="color:#064e3b;">80.2%</span>
+                        <span class="stat-label" style="color:#064e3b;">참여 완수율</span>
+                        <span class="stat-sub text-slate-400">여성 주도 70.4%</span>
+                    </div>
+                </div>
+
+                <!-- 인용구: 김경희 사회연대경제과장 -->
+                <div class="flex items-start gap-3 bg-white border border-teal-100 rounded-2xl px-4 py-3 shadow-sm">
+                    <i class="fa-solid fa-quote-left text-2xl text-majuTeal flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="slide1-quote-text text-slate-700 leading-relaxed italic">
+                            "마주센터는 시민과 기업이 주인공이 되어 마음껏 소통하는 <strong class="text-forest">놀이터</strong>이자,
+                            함께 성장을 일궈가는 적극적인 <strong class="text-forest">플랫폼</strong>이 될 것입니다."
+                        </p>
+                        <span class="text-slate-500 font-bold mt-1 block" style="font-size:12px;">— 김경희 광명시 사회연대경제과장 (광명시청 공식 블로그 취재 발췌)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단: 데이터 투명성 링크 -->
+            <div class="flex flex-wrap gap-2 pt-3 border-t border-teal-100">
+                <a href="https://docs.google.com/spreadsheets/d/13CRJm4nQ0ZhBykPtjITz2cS5PT_1Gww6iwEU2j6CMjk/edit?usp=sharing" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold px-3 py-1.5 rounded-xl hover:bg-emerald-100 transition" style="font-size:12px;">
+                    <i class="fa-solid fa-file-excel text-emerald-600"></i> 통계·검증 데이터 시트
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1m1_VOzklMEuK3ufJ3AA7TexPEWGuSjutxw3vnkujpgA/edit?usp=sharing" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-1.5 bg-teal-50 border border-teal-200 text-teal-800 font-bold px-3 py-1.5 rounded-xl hover:bg-teal-100 transition" style="font-size:12px;">
+                    <i class="fa-solid fa-database text-teal-600"></i> 워크숍 의견 로우 DB
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+                <a href="https://m.blog.naver.com/gmcityhall/224312627336" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 text-slate-700 font-bold px-3 py-1.5 rounded-xl hover:bg-slate-100 transition" style="font-size:12px;">
+                    <i class="fa-solid fa-newspaper text-slate-500"></i> 광명시청 공식 취재 기사
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- 우측: 현장 단체 사진 -->
+        <div class="relative overflow-hidden h-full">
+            <img class="w-full h-full object-cover" alt="광명시 마주센터 시민 참여 워크숍 현장" src="/images/workshop-full-shot.png" onerror="this.onerror=null; this.src='image_b250e3.jpg';">
+            <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(240,253,250,0.2) 0%, transparent 35%);"></div>
+            <!-- 사회연대경제 3대 가치 배지 -->
+            <div class="absolute top-5 left-4 flex flex-col gap-2">
+                <span class="slide1-overlay-badge" style="background:rgba(6,78,59,0.82);">
+                    <i class="fa-solid fa-people-group text-emerald-300"></i> 연대 · 공동체
+                </span>
+                <span class="slide1-overlay-badge" style="background:rgba(13,148,136,0.82);">
+                    <i class="fa-solid fa-seedling text-green-200"></i> 상생 · 지속가능성
+                </span>
+                <span class="slide1-overlay-badge" style="background:rgba(5,150,105,0.82);">
+                    <i class="fa-solid fa-comments text-emerald-100"></i> 시민 주도 참여
+                </span>
+                <span class="slide1-overlay-badge" style="background:rgba(180,83,9,0.80);">
+                    <i class="fa-solid fa-triangle-exclamation text-yellow-200"></i> 나비처럼 날아오를 우리의 다짐
+                </span>
+            </div>
+            <!-- 하단 캡션 -->
+            <div class="absolute bottom-4 right-4 bg-black/65 text-white px-2.5 py-1.5 rounded-lg" style="-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-size:12px;">
+                <i class="fa-solid fa-camera mr-1"></i> 101명 신청 · 81명 참석 · 광명 시민 연대 현장
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 2: 스마트 워크숍 혁신 기획 (Paperless & AI + Gwangmyeong City Hall Blog Reportage) -->
+    <div class="slide-container" id="slide2">
+        <h2 class="slide-title">스마트 워크숍 기획 혁신 <span><i class="fa-solid fa-circle-nodes text-emerald-600"></i> 포스트잇 대신 QR코드와 AI가 연결한 새로운 거버넌스</span></h2>
+        <div class="content-area">
+            <div class="two-column" style="grid-template-columns: 46% 54%;">
+                <!-- 좌측 내용 설명 카드 -->
+                <div class="flex flex-col gap-4 justify-between h-full py-1">
+                    <div class="space-y-3">
+                        <div class="bg-teal-50 border-l-4 border-majuTeal p-4 rounded-r-xl">
+                            <h3 class="text-sm font-bold text-teal-900 mb-1.5 flex items-center justify-between">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-square-rss text-emerald-600"></i> 광명시청 공식 블로그 기획 취재</span>
+                                <a href="https://m.blog.naver.com/gmcityhall/224312627336" target="_blank" rel="noopener noreferrer" class="text-xs text-teal-700 underline hover:text-teal-900">
+                                    취재 원본 보기 <i class="fa-solid fa-square-arrow-up-right"></i>
+                                </a>
+                            </h3>
+                            <p class="text-sm text-teal-800 leading-relaxed">
+                                <strong><a href="https://m.blog.naver.com/gmcityhall/224312627336" target="_blank" rel="noopener noreferrer">공식 블로그 기사</a></strong>에서는 행정 혁신 사례로 본 행사의 스마트 설계를 집중 보도했습니다. 종이 한 장 없이 QR코드 수집과 AI 실시간 분류를 이뤄내며 환경 보존과 고도화된 시민 소통을 동시에 잡아냈다는 현장의 감동을 담아냈습니다.
+                            </p>
+                        </div>
+
+                        <div class="bg-emerald-50 border-l-4 border-majuMint p-4 rounded-r-xl">
+                            <h3 class="text-sm font-bold text-emerald-900 mb-1.5 flex items-center gap-1.5">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-500 animate-pulse"></i> AI의 성장통과 시민의 따뜻한 연대
+                            </h3>
+                            <p class="text-sm text-emerald-800 leading-relaxed">
+                                NotebookLM 도입 초기 발생한 일부 <strong>할루시네이션(환각 현상)</strong>은 향후 프롬프트 엔지니어링 개선 과제로 도출되었습니다. 그러나 시민들은 기술적 오류에 실망하기보다, <strong>적극적 피드백과 집단지성</strong>으로 서로 보완해 나가며 진정한 참여형 연대의 희망을 증명했습니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 시민 현장 인용 (시장 격려사 대신) -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-start gap-2.5">
+                        <span class="text-2xl text-majuTeal leading-none flex-shrink-0"><i class="fa-solid fa-quote-left"></i></span>
+                        <div class="text-sm text-slate-700 leading-relaxed">
+                            <strong class="text-forest block mb-1">워크숍 참여 시민 현장 소감 (공식 취재글 발췌)</strong>
+                            "성패를 떠나 디지털 방식을 직접 체험하고 보완점을 찾아가는 이 과정 자체가 하나의 살아있는 <strong class="text-majuTeal">소셜리빙랩</strong>이었습니다."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 우측 이미지: 가로형 2단 적층 -->
+                <div class="flex flex-col gap-3 h-full">
+                    <div class="relative rounded-xl overflow-hidden shadow-md border border-slate-200 flex-1 bg-slate-900">
+                        <img class="w-full h-full object-contain" alt="테이블 세팅과 QR 안내판" src="/images/qr-form.png">
+                        <div class="absolute bottom-0 inset-x-0 bg-black/70 p-2 text-center text-xs text-slate-200">
+                            <i class="fa-solid fa-qrcode mr-1"></i> 테이블 QR 접속 가이드
+                        </div>
+                    </div>
+                    <div class="relative rounded-xl overflow-hidden shadow-md border border-slate-200 flex-1 bg-slate-900">
+                        <img class="w-full h-full object-contain" alt="NotebookLM 요약 메커니즘" src="/images/paperless-smart-governance.png">
+                        <div class="absolute bottom-0 inset-x-0 bg-black/75 p-2 text-xs text-slate-200">
+                            <i class="fa-solid fa-robot mr-1 text-emerald-400"></i> <strong>스마트 거버넌스 첫 시도:</strong> AI 도식화 기반 디지털 발표
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 3: 워크숍 참여자 프로필 (인구통계학적 인포그래픽 데이터) -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">참여자 구성 입체 분석 <span><i class="fa-solid fa-user-check text-majuTeal"></i> 총 신청자 101명 중 81명 실참석 완료</span></h2>
+        <div class="content-area">
+            <div class="two-column" style="grid-template-columns: 50% 50%;">
+                <!-- 좌측 컬럼: 통계 요약 카드 및 핵심 증거 데이터 -->
+                <div class="flex flex-col gap-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
+                        <h3 class="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card text-majuTeal"></i> 참석 비율 및 성별 분포
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            모바일 신청 완수자 101명 중 당일 81명이 출석하여 <strong>80.2%의 최종 참석 완수율</strong>을 보였습니다. 특히 성별 분석에서는 여성이 57명(70.4%)을 기록하여 지역 기반 사회적 혁신 활동에 여성 주체들의 주도성이 대단히 강력함을 입증합니다.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-3 text-center">
+                            <div class="bg-gradient-to-b from-teal-50 to-teal-100/50 rounded-xl p-3 border border-teal-100">
+                                <span class="block text-2xl font-black font-montserrat text-teal-800">80.2%</span>
+                                <span class="text-[13px] text-teal-600 font-bold">참가 완수율</span>
+                            </div>
+                            <div class="bg-gradient-to-b from-emerald-50 to-emerald-100/50 rounded-xl p-3 border border-emerald-100">
+                                <span class="block text-2xl font-black font-montserrat text-emerald-800">70.4%</span>
+                                <span class="text-[13px] text-emerald-600 font-bold">여성 주체 비중</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-100 rounded-xl p-4 border border-slate-200">
+                        <h4 class="text-xs font-bold text-slate-700 mb-1.5"><i class="fa-solid fa-sitemap mr-1.5 text-majuTeal"></i>참여 주요 네트워크 조직 군</h4>
+                        <p class="text-[13px] text-slate-500 leading-relaxed">
+                            온사회적협동조합, 배움발전소, 모두한발짝, 청소년플러스끌림 사협, 광명시민정원사협동조합, 마음결협동조합, 올솔루션사회적협동조합, 휴가온협동조합, 광명시공익활동지원센터 등
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 우측 컬럼: 가로 막대 차트 -->
+                <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 flex flex-col justify-between h-full">
+                    <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar text-majuTeal"></i> 실제 참석자 연령대 분포 (N=81)
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>50대 (최고 참여층)</span><span>45.7% (37명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 45.7%; background: linear-gradient(90deg, #064e3b, #0d9488);">45.7%</div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>40대</span><span>25.9% (21명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 25.9%; background: linear-gradient(90deg, #0d9488, #10b981);">25.9%</div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>30대 및 60대 이하</span><span>19.8% (16명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 19.8%; background: linear-gradient(90deg, #3b82f6, #60a5fa);">19.8%</div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>20대 이하 및 70대 이상</span><span>8.6% (8명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 8.6%; background: linear-gradient(90deg, #94a3b8, #cbd5e1);">8.6%</div></div>
+                        </div>
+                    </div>
+                    <p class="text-[13px] text-slate-400 mt-3 text-right">* 40~50대 중추 활동가 층이 전원의 71.6% 점유</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 4: 참여 동기 및 인지 경로 분석 (정량 조사 시각화) -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">참여 동기 &amp; 유입 분석 <span><i class="fa-solid fa-magnifying-glass-chart text-coral"></i> 관계 중심 홍보망과 책임 중심 참여 열망</span></h2>
+        <div class="content-area">
+            <div class="two-column">
+                <!-- 좌측 컬럼: 행사 인지 경로 (강력한 커뮤니티 전파력) -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-share-nodes text-coral"></i> 행사 유입 인지 경로 (N=81)
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            사회연대경제 관련 단체나 조직들이 상시 활용하는 <strong>카카오톡 커뮤니티 단톡방(49.4%)</strong>과 믿을 만한 파트너의 <strong>직접 추천 권유(28.4%)</strong>가 유입의 <strong>77.8%</strong>를 장악했습니다. 전통 행정 홍보 대비 소셜 커뮤니티의 연대 파급력이 높게 증명되었습니다.
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3.5">
+                        <div class="progress-bar-group">
+                            <div class="progress-label" style="font-size:14px;"><span>사회연대 조직 카카오톡 단톡방</span><span>49.4% (40명)</span></div>
+                            <div class="progress-bar-outer" style="height:12px;"><div class="progress-bar-inner" style="width: 49.4%; background: #f97316;"></div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label" style="font-size:14px;"><span>주변 동료 및 실무자 직접 소개</span><span>28.4% (23명)</span></div>
+                            <div class="progress-bar-outer" style="height:12px;"><div class="progress-bar-inner" style="width: 28.4%; background: #fb923c;"></div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label" style="font-size:14px;"><span>SNS 및 공식 시정 포털 사이트</span><span>13.6% (11명)</span></div>
+                            <div class="progress-bar-outer" style="height:12px;"><div class="progress-bar-inner" style="width: 13.6%; background: #cbd5e1;"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 우측 컬럼: 참여 동기 구성비 (도넛 차트) -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between h-full">
+                    <div class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-heart text-rose-500"></i> 자발적 참여 동기 (N=81)
+                    </div>
+                    
+                    <div class="flex items-center gap-5 justify-center py-4">
+                        <!-- 도넛형 SVG -->
+                        <div class="relative w-36 h-36 flex-shrink-0">
+                            <svg width="100%" height="100%" viewBox="0 0 42 42">
+                                <circle cx="21" cy="21" r="15.91" fill="#fff"></circle>
+                                <circle cx="21" cy="21" r="15.91" fill="transparent" stroke="#f1f5f9" stroke-width="5"></circle>
+                                <!-- 주제 관심 (40.7%) -->
+                                <circle cx="21" cy="21" r="15.91" fill="transparent" stroke="#064e3b" stroke-width="5" stroke-dasharray="40.7 59.3" stroke-dashoffset="25"></circle>
+                                <!-- 연대 책임 (39.5%) -->
+                                <circle cx="21" cy="21" r="15.91" fill="transparent" stroke="#0d9488" stroke-width="5" stroke-dasharray="39.5 60.5" stroke-dashoffset="-15.7"></circle>
+                                <!-- 시민 참여 권리 (11.1%) -->
+                                <circle cx="21" cy="21" r="15.91" fill="transparent" stroke="#3b82f6" stroke-width="5" stroke-dasharray="11.1 88.9" stroke-dashoffset="-55.2"></circle>
+                                <!-- 단순 호기심 (8.6%) -->
+                                <circle cx="21" cy="21" r="15.91" fill="transparent" stroke="#f59e0b" stroke-width="5" stroke-dasharray="8.6 91.4" stroke-dashoffset="-66.3"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-xl font-extrabold text-slate-800 font-montserrat">80.2%</span>
+                                <span class="text-[13px] text-slate-400 font-bold">자발적 주체</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="text-[13px] text-slate-600 space-y-1.5 flex-grow">
+                            <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-forest"></span> <span>평소 주제에 대한 지대한 관심 (40.7%)</span></li>
+                            <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-majuTeal"></span> <span>연대 조직원으로서의 책임감 (39.5%)</span></li>
+                            <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-blue-500"></span> <span>순수 시민 기획 참여 열망 (11.1%)</span></li>
+                            <li class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500"></span> <span>단순 호기심 및 기타 (8.6%)</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-[13px] text-slate-400 font-medium">※ 무응답이나 소극 유입 없음. 80.2%는 명확한 목적 하에 행동.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 5: 공간 구조와 5대 테마 연계 (Tiled_Text_With_Icons 극대화) -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">마주센터 공간 설계와 5대 테마 <span><i class="fa-solid fa-building text-majuTeal"></i> 1층부터 4층까지 시민들의 109가지 아이디어 수렴 정합성</span></h2>
+        <div class="content-area">
+            <div class="two-column" style="grid-template-columns: 53% 47%;">
+                <!-- 좌측 층별 테마 연결 세부 분석 -->
+                <div class="grid grid-cols-1 gap-2.5 h-full">
+                    <div class="bg-teal-50 border-l-4 border-majuTeal p-3 rounded-xl flex items-start gap-3">
+                        <span class="text-xl text-majuTeal mt-0.5"><i class="fa-solid fa-mug-hot"></i></span>
+                        <div class="text-[13px]">
+                            <h4 class="font-extrabold text-slate-800 text-xs">1F: 시민들의 놀이터 &amp; 카페 마주 (19건)</h4>
+                            <p class="text-slate-600 leading-relaxed mt-0.5">배리어프리 친환경 복합 거점. 노인·아동·장애인이 보기에 쉬운 그림 메뉴판 제작, 발달장애인 일자리 창출, 광명동굴 스마트팜 딸기 음료 등 로컬 시그니처 메뉴 판매 제안.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-orange-50/70 border-l-4 border-coral p-3 rounded-xl flex items-start gap-3">
+                        <span class="text-xl text-coral mt-0.5"><i class="fa-solid fa-basket-shopping"></i></span>
+                        <div class="text-[13px]">
+                            <h4 class="font-extrabold text-slate-800 text-xs">2F: 기업 테스트베드 &amp; 팝업스토어 (39건)</h4>
+                            <p class="text-slate-600 leading-relaxed mt-0.5">체험 중심 스토리텔링 샵. "폐현수막이 가방이 되기까지" 생산자 중심 스토리 전시, 자원순환 제로웨이스트 클래스, 2층 계단의 피아노 계단화 제안.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50/70 border-l-4 border-blue-500 p-3 rounded-xl flex items-start gap-3">
+                        <span class="text-xl text-blue-500 mt-0.5"><i class="fa-solid fa-vial-circle-check"></i></span>
+                        <div class="text-[13px]">
+                            <h4 class="font-extrabold text-slate-800 text-xs">3F: 개방형 협업 &amp; 소셜리빙랩 (18건)</h4>
+                            <p class="text-slate-600 leading-relaxed mt-0.5">지역 밀착 일상 실험실. 주민 안전 보행로 IoT 매핑, 디지털 소외 예층을 위한 생성형 AI 활용, 주민이 직접 묻고 결과를 상시 소통하는 주민제안보드 구축.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50/70 border-l-4 border-purple-500 p-3 rounded-xl flex items-start gap-3">
+                        <span class="text-xl text-purple-500 mt-0.5"><i class="fa-solid fa-masks-theater"></i></span>
+                        <div class="text-[13px]">
+                            <h4 class="font-extrabold text-slate-800 text-xs">4F: 커뮤니티 교류 &amp; 문화기획/네트워킹 (33건)</h4>
+                            <p class="text-slate-600 leading-relaxed mt-0.5">예술가 데이 지정을 통한 무전력/무음향 옥상 정원 버스킹, 지역 청년 예술가 상설 아카이빙, 소상공인과 고립 청년들의 치유를 돕는 "실패 공유회" 제안.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 우측 마주센터 조감도 3D 단면도 배치 -->
+                <div class="flex flex-col gap-3 h-full">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200 flex-1">
+                        <img alt="마주(MAJU) 센터 조감도 및 층별 분석" src="/images/maju-center-bird-view.png" class="w-full h-full object-contain">
+                        <div class="absolute inset-x-0 bottom-0 bg-black/60 p-3 text-center text-xs text-white backdrop-blur-sm">
+                            <i class="fa-solid fa-drafting-compass mr-1.5 text-majuTeal animate-pulse"></i>마주센터 1F~4F 층별 설계 매칭 조감도 및 사용 계획
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+                        <table class="w-full text-[13px]">
+                            <thead>
+                                <tr class="bg-forest text-white">
+                                    <th class="px-2 py-1.5 text-left font-semibold whitespace-nowrap">층수</th>
+                                    <th class="px-2 py-1.5 text-left font-semibold">공간 명칭 및 주요 기능</th>
+                                    <th class="px-2 py-1.5 text-left font-semibold">지향하는 운영 방식 (테스트베드 전략)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-t border-slate-100">
+                                    <td class="px-2 py-1.5 font-bold text-forest whitespace-nowrap">1층</td>
+                                    <td class="px-2 py-1.5 font-semibold text-slate-800">베이커리 카페 마주</td>
+                                    <td class="px-2 py-1.5 text-slate-600">장애인·노인·다문화 가정 등 누구에게나 열린 커뮤니티 공간</td>
+                                </tr>
+                                <tr class="border-t border-slate-100 bg-slate-50">
+                                    <td class="px-2 py-1.5 font-bold text-forest whitespace-nowrap">2층</td>
+                                    <td class="px-2 py-1.5 font-semibold text-slate-800">팝업스토어 및 기획 전시</td>
+                                    <td class="px-2 py-1.5 text-slate-600">가치소비 제품을 선보이고, 판로를 지원하는 상생의 장</td>
+                                </tr>
+                                <tr class="border-t border-slate-100">
+                                    <td class="px-2 py-1.5 font-bold text-forest whitespace-nowrap">3층</td>
+                                    <td class="px-2 py-1.5 font-semibold text-slate-800">소셜리빙랩 및 공유 공간</td>
+                                    <td class="px-2 py-1.5 text-slate-600">아이디어 교류와 프로젝트 협업이 이뤄지는 실행 중심 공간</td>
+                                </tr>
+                                <tr class="border-t border-slate-100 bg-slate-50">
+                                    <td class="px-2 py-1.5 font-bold text-forest whitespace-nowrap">4층 &amp; 옥상</td>
+                                    <td class="px-2 py-1.5 font-semibold text-slate-800">열린 문화 공간 &amp; 회복의 정원</td>
+                                    <td class="px-2 py-1.5 text-slate-600">문화 프로그램을 즐기는 열린 공간 및 도심 속 루프탑 정원</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 6: 만족도 및 지속 참여의사 분석 -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">워크숍 만족도 및 참여 모멘텀 <span><i class="fa-solid fa-chart-pie text-emerald-600"></i> 사후 응답 49명 정교 정량 분석 결과 반영</span></h2>
+        <div class="content-area">
+            <div class="two-column" style="grid-template-columns: 46% 54%;">
+                <!-- 좌측 컬럼: 만족도 점수 강조 카드 -->
+                <div class="flex flex-col gap-4 h-full justify-between py-2">
+                    <div class="bg-gradient-to-br from-teal-800 to-forest rounded-2xl p-6 text-white shadow-lg">
+                        <span class="text-xs text-teal-300 font-extrabold uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                            <i class="fa-solid fa-square-poll-vertical"></i> QUANTITATIVE VALUE
+                        </span>
+                        <h3 class="text-lg font-bold mb-4">시민이 응답한 워크숍 만족도</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 border-t border-teal-700 pt-4">
+                            <div>
+                                <span class="text-[13px] text-teal-200 block">운영 방식 만족도</span>
+                                <strong class="text-3xl font-black font-montserrat text-white mt-1 block">4.10 <span class="text-xs font-light text-teal-300">/ 5.0</span></strong>
+                            </div>
+                            <div>
+                                <span class="text-[13px] text-teal-200 block">테이블 토의 소통</span>
+                                <strong class="text-3xl font-black font-montserrat text-majuMint mt-1 block">4.22 <span class="text-xs font-light text-emerald-300">/ 5.0</span></strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                        <p class="text-xs text-emerald-800 leading-relaxed font-medium">
+                            <i class="fa-solid fa-circle-check text-majuTeal mr-1.5"></i>
+                            전반적인 행사 운영 만족도 대비 <strong>의견 교환 및 토의 소통 부문의 점수(4.22)</strong>가 더 높게 나타났습니다. 이는 일방향적 강의 방식을 철저히 지양하고, <strong>QR과 AI 요약 기반의 스마트 리프레시 토의</strong>가 시민들의 활발한 주도성을 적극 발현했음을 뒷받침합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 우측 컬럼: 향후 동참 의향 강도 막대그래프 -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between h-full">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-trend-up text-majuTeal"></i> 마주센터 개관 후 주도적인 참여 의향 강도
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>네, 운영진·동아리 등 적극적 주체로 동참</span><span>65.3% (32명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 65.3%; bg-color: #064e3b;">65.3%</div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>시간 및 여건 상황에 맞추어 참여</span><span>34.7% (17명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 34.7%; background: #0d9488;">34.7%</div></div>
+                        </div>
+                        <div class="progress-bar-group">
+                            <div class="progress-label"><span>개관 기념 공식 행사 정례 초대 희망</span><span>93.9% (46명)</span></div>
+                            <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: 93.9%; background: #3b82f6;">93.9%</div></div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-[12px] text-slate-400 font-medium italic mt-2">
+                        * 참여 의사 없음 또는 부정적인 피드백 비율은 <strong>0.0%</strong>로, 본 워크숍에 참여한 시민 전원이 자발적인 공간 주인의식(Citizenship Ownership)을 단단하게 다졌습니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 7: 종합 제언 및 향후 과제 (Key Takeaways) -->
+    <div class="slide-container" id="slide7" style="padding: 0; display: grid; grid-template-columns: 55% 45%;">
+        <div class="p-10 md:p-12 flex flex-col justify-between h-full bg-slate-50">
+            <div>
+                <span class="inline-flex items-center gap-1 bg-teal-100 text-teal-800 text-[12px] font-black px-3 py-1.5 rounded-full mb-3">
+                    <i class="fa-solid fa-star"></i> STRATEGIC KEY TAKEAWAYS
+                </span>
+                <h2 class="text-3xl font-black text-forest leading-snug mb-4">성공적 마주센터 개관을 위한<br><span class="text-majuTeal">3대 전략적 핵심 제언</span></h2>
+                
+                <div class="space-y-3.5 text-xs">
+                    <div class="flex items-start gap-3">
+                        <span class="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center font-bold text-[12px] flex-shrink-0 mt-0.5">1</span>
+                        <div>
+                            <strong class="text-slate-800 block">시민 서포터즈 조직화 및 공간 가동 매칭</strong>
+                            <p class="text-slate-500 leading-relaxed mt-0.5">참석자의 80.2%에 달하는 고관여 주체들을 조기에 서포터즈 및 층별 소셜 리더단으로 공식 임명하여 개관 동력을 확보해야 합니다.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center font-bold text-[12px] flex-shrink-0 mt-0.5">2</span>
+                        <div>
+                            <strong class="text-slate-800 block">가치 소비를 행동으로 겪는 체감 중심 공간화</strong>
+                            <p class="text-slate-500 leading-relaxed mt-0.5">시민들은 단순 카페 음료 구매나 상품 구매가 아닌, 제로웨이스트 실천 DIY, 배리어프리, 실패 공감회 등 몸으로 겪는 오감 경험을 원합니다.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center font-bold text-[12px] flex-shrink-0 mt-0.5">3</span>
+                        <div>
+                            <strong class="text-slate-800 block">AI 한계를 극복하는 연대적 피드백 시스템</strong>
+                            <p class="text-slate-500 leading-relaxed mt-0.5">스마트 워크숍 중 도출된 AI 할루시네이션 극복 경험을 자산 삼아, 향후 마주센터 운영 프로세스 전반에 '시민 검증단' 및 투명한 제안 피드백 채널을 구축하여 상호 신뢰와 기술 혁신을 함께 완성합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 하단 링크 영역: 공식 블로그 기사 및 두 개의 구글 스프레드시트 투명 제공 -->
+            <div class="border-t border-slate-200 pt-4 flex flex-col gap-2 text-[13px]">
+                <div class="flex items-center justify-between text-slate-500">
+                    <span>광명시 사회연대혁신센터 마주센터 건립준비위원회</span>
+                    <a href="https://m.blog.naver.com/gmcityhall/224312627336" target="_blank" rel="noopener noreferrer" class="text-majuTeal hover:underline font-bold">
+                        <i class="fa-solid fa-file-invoice mr-0.5"></i> 공식 블로그 취재 기사 보기
+                    </a>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-1">
+                    <a href="https://docs.google.com/spreadsheets/d/13CRJm4nQ0ZhBykPtjITz2cS5PT_1Gww6iwEU2j6CMjk/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-2 py-1 rounded-md hover:bg-emerald-100 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-file-excel text-emerald-600"></i> 만족도·통계 검증시트
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1m1_VOzklMEuK3ufJ3AA7TexPEWGuSjutxw3vnkujpgA/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-teal-50 border border-teal-200 text-teal-800 px-2 py-1 rounded-md hover:bg-teal-100 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-database text-teal-600"></i> 워크숍 의견 로우 DB 시트
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative overflow-hidden h-full">
+            <img class="w-full h-full object-cover" alt="Coming Soon 건물 배너" src="/images/maju-center.png">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-50/20 via-transparent to-transparent"></div>
+            <!-- 이미지 라벨 표기 -->
+            <div class="absolute bottom-4 right-4 bg-black/60 text-white text-[13px] px-2.5 py-1 rounded-md backdrop-blur-sm">
+                <i class="fa-solid fa-flag mr-1"></i> COMING SOON: 당신을 마주하게 되어 반갑습니다.
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
